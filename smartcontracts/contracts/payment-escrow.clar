@@ -11,6 +11,8 @@
 (define-constant ERR_PAYMENT_NOT_CONFIRMED (err u105))
 (define-constant ERR_INVALID_CONFIRMATIONS (err u106))
 (define-constant ERR_ESCROW_LOCKED (err u107))
+(define-constant ERR_CONTRACT_PAUSED (err u108))
+(define-constant ERR_INVALID_ADDRESS (err u109))
 
 ;; Payment states
 (define-constant PAYMENT_STATE_PENDING u0)
@@ -21,6 +23,7 @@
 ;; Contract owner and admin
 (define-data-var owner principal (as-contract tx-sender))
 (define-data-var admin principal (as-contract tx-sender))
+(define-data-var contract-paused bool false)
 
 ;; Escrow settings
 (define-data-var required-confirmations uint u6)
@@ -106,6 +109,24 @@
   )
 )
 
+;; Pause contract (emergency function)
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "PaymentEscrowPaused")
+    (ok (var-set contract-paused true))
+  )
+)
+
+;; Unpause contract
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "PaymentEscrowUnpaused")
+    (ok (var-set contract-paused false))
+  )
+)
+
 ;; ===== PAYMENT FUNCTIONS =====
 
 ;; Create a new payment request
@@ -120,7 +141,8 @@
     (expires-at (* expires-in-hours u3600)) ;; Simplified for now
   )
     (begin
-      ;; Validate inputs
+      ;; Validate inputs and contract state
+      (asserts! (not (var-get contract-paused)) ERR_CONTRACT_PAUSED)
       (asserts! (not (var-get escrow-locked)) ERR_ESCROW_LOCKED)
       (asserts! (is-eq (map-get? authorized-merchants tx-sender) (some true)) ERR_UNAUTHORIZED)
       (asserts! (> amount u0) ERR_INVALID_AMOUNT)
@@ -146,7 +168,7 @@
       (var-set payment-id-counter payment-id)
       
       ;; Emit event
-      ;; (ok (emit-event payment-created payment-id tx-sender amount currency))
+      (print "PaymentCreated")
       
       ;; Return payment ID
       (ok payment-id)

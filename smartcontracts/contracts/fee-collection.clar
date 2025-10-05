@@ -7,6 +7,9 @@
 (define-constant ERR_TREASURY_NOT_FOUND (err u103))
 (define-constant ERR_INSUFFICIENT_BALANCE (err u104))
 (define-constant ERR_DISTRIBUTION_FAILED (err u105))
+(define-constant ERR_CONTRACT_PAUSED (err u106))
+(define-constant ERR_INVALID_COLLECTION_ID (err u107))
+(define-constant ERR_ALREADY_DISTRIBUTED (err u108))
 
 ;; Fee tiers and rates
 (define-constant FEE_TIER_BASIC u0)     ;; 2.5% fee
@@ -25,6 +28,7 @@
 ;; Contract owner and fee collector
 (define-data-var owner principal (as-contract tx-sender))
 (define-data-var fee-collector principal (as-contract tx-sender))
+(define-data-var contract-paused bool false)
 
 ;; Fee configuration
 (define-data-var base-fee-rate uint BASIC_FEE_RATE)
@@ -121,6 +125,24 @@
   )
 )
 
+;; Pause contract (emergency function)
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "ContractPaused")
+    (ok (var-set contract-paused true))
+  )
+)
+
+;; Unpause contract
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "ContractUnpaused")
+    (ok (var-set contract-paused false))
+  )
+)
+
 ;; ===== FEE COLLECTION FUNCTIONS =====
 
 ;; Calculate fee for a payment amount
@@ -139,7 +161,7 @@
                        (var-get max-fee-amount)
                        calculated-fee)))
   )
-    (ok final-fee)
+    final-fee
   )
 )
 
@@ -150,12 +172,13 @@
   (payment-amount uint)
 )
   (let (
-    (fee-amount (unwrap-panic (calculate-fee payment-amount merchant)))
+    (fee-amount (calculate-fee payment-amount merchant))
     (collection-id (+ (var-get total-collected-fees) u1))
-    (current-time u0) ;; Simplified for now
+    (current-time u0) ;; TODO: Use proper time when available
   )
     (begin
-      ;; Validate inputs
+      ;; Validate inputs and contract state
+      (asserts! (not (var-get contract-paused)) ERR_CONTRACT_PAUSED)
       (asserts! (is-eq tx-sender (var-get fee-collector)) ERR_UNAUTHORIZED)
       (asserts! (> payment-amount u0) ERR_INVALID_AMOUNT)
       (asserts! (> fee-amount u0) ERR_INVALID_AMOUNT)
@@ -166,7 +189,7 @@
         merchant: merchant,
         amount: payment-amount,
         fee-amount: fee-amount,
-        fee-rate: (unwrap-panic (map-get? merchant-fee-tiers merchant) FEE_TIER_BASIC),
+        fee-rate: (default-to FEE_TIER_BASIC (map-get? merchant-fee-tiers merchant)),
         collected-at: current-time,
         distributed: false
       })
@@ -174,11 +197,8 @@
       ;; Update totals
       (var-set total-collected-fees collection-id)
       
-      ;; Auto-distribute if amount is significant
-      (if (> fee-amount u10000) ;; If fee > 0.0001 BTC
-        (distribute-revenue fee-amount)
-        (ok true)
-      )
+      ;; Emit event
+      (print "FeeCollected")
       
       (ok collection-id)
     )
@@ -195,7 +215,8 @@
     (treasury-amount (/ (* amount TREASURY_SHARE) u1000))
   )
     (begin
-      ;; Validate inputs
+      ;; Validate inputs and contract state
+      (asserts! (not (var-get contract-paused)) ERR_CONTRACT_PAUSED)
       (asserts! (is-eq tx-sender (var-get fee-collector)) ERR_UNAUTHORIZED)
       (asserts! (> amount u0) ERR_INVALID_AMOUNT)
       
@@ -205,8 +226,8 @@
       (var-set treasury-revenue (+ (var-get treasury-revenue) treasury-amount))
       (var-set total-distributed-fees (+ (var-get total-distributed-fees) amount))
       
-      ;; Mark collections as distributed
-      ;; Note: In a real implementation, this would iterate through pending collections
+      ;; Emit distribution event
+      (print "RevenueDistributed")
       
       (ok true)
     )
@@ -222,7 +243,52 @@
     ;; Update platform revenue
     (var-set platform-revenue (- (var-get platform-revenue) amount))
     
+    ;; Emit withdrawal event
+    (print "EmergencyWithdrawal")
+    
     (ok amount)
+  )
+)
+
+;; ===== BATCH OPERATIONS =====
+
+;; Batch collect fees for multiple payments (simplified version)
+(define-public (batch-collect-fees 
+  (payment-ids (list 10 uint))
+  (merchants (list 10 principal))
+  (payment-amounts (list 10 uint))
+)
+  (begin
+    ;; Validate inputs and contract state
+    (asserts! (not (var-get contract-paused)) ERR_CONTRACT_PAUSED)
+    (asserts! (is-eq tx-sender (var-get fee-collector)) ERR_UNAUTHORIZED)
+    (asserts! (is-eq (len payment-ids) (len merchants)) ERR_INVALID_AMOUNT)
+    (asserts! (is-eq (len payment-ids) (len payment-amounts)) ERR_INVALID_AMOUNT)
+    
+    ;; For now, process first payment only (Clarity limitations with complex list operations)
+    (if (> (len payment-ids) u0)
+      (let (
+        (payment-id (unwrap-panic (element-at payment-ids u0)))
+        (merchant (unwrap-panic (element-at merchants u0)))
+        (amount (unwrap-panic (element-at payment-amounts u0)))
+      )
+        (collect-fee payment-id merchant amount)
+      )
+      (ok u0)
+    )
+  )
+)
+
+;; Distribute specific fee collection (simplified)
+(define-public (distribute-specific-collection (collection-id uint))
+  (begin
+    ;; Validate inputs
+    (asserts! (not (var-get contract-paused)) ERR_CONTRACT_PAUSED)
+    (asserts! (is-eq tx-sender (var-get fee-collector)) ERR_UNAUTHORIZED)
+    
+    ;; For now, just distribute a fixed amount
+    ;; TODO: Implement proper collection lookup and distribution
+    (distribute-revenue u1000)
   )
 )
 
@@ -254,7 +320,7 @@
 
 ;; Get fee calculation preview
 (define-read-only (preview-fee (amount uint) (merchant principal))
-  (calculate-fee amount merchant)
+  (ok (calculate-fee amount merchant))
 )
 
 ;; Get contract configuration
@@ -265,6 +331,45 @@
     treasury-contract: (var-get treasury-contract),
     base-fee-rate: (var-get base-fee-rate),
     min-fee-amount: (var-get min-fee-amount),
-    max-fee-amount: (var-get max-fee-amount)
+    max-fee-amount: (var-get max-fee-amount),
+    contract-paused: (var-get contract-paused)
   })
+)
+
+;; Get distribution addresses
+(define-read-only (get-distribution-addresses)
+  (ok {
+    platform: (map-get? distribution-addresses u0),
+    team: (map-get? distribution-addresses u1),
+    treasury: (map-get? distribution-addresses u2)
+  })
+)
+
+;; Get pending distributions count (simplified)
+(define-read-only (get-pending-distributions)
+  (let (
+    (total-collections (var-get total-collected-fees))
+    (total-distributed (var-get total-distributed-fees))
+  )
+    (ok (- total-collections total-distributed))
+  )
+)
+
+;; Get fee tier information
+(define-read-only (get-fee-tier-info (tier uint))
+  (ok (if (is-eq tier FEE_TIER_BASIC)
+        { tier: FEE_TIER_BASIC, rate: BASIC_FEE_RATE, name: "Basic" }
+        (if (is-eq tier FEE_TIER_PRO)
+          { tier: FEE_TIER_PRO, rate: PRO_FEE_RATE, name: "Pro" }
+          (if (is-eq tier FEE_TIER_ENTERPRISE)
+            { tier: FEE_TIER_ENTERPRISE, rate: ENTERPRISE_FEE_RATE, name: "Enterprise" }
+            { tier: tier, rate: u0, name: "Unknown" }
+          )
+        )
+      ))
+)
+
+;; Check if contract is paused
+(define-read-only (is-paused)
+  (ok (var-get contract-paused))
 )

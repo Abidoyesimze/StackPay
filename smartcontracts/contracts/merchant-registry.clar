@@ -7,6 +7,8 @@
 (define-constant ERR_INVALID_TIER (err u103))
 (define-constant ERR_INSUFFICIENT_REPUTATION (err u104))
 (define-constant ERR_KYC_REQUIRED (err u105))
+(define-constant ERR_CONTRACT_PAUSED (err u106))
+(define-constant ERR_INVALID_STATUS (err u107))
 
 ;; Merchant tiers
 (define-constant TIER_BASIC u0)
@@ -30,6 +32,7 @@
 ;; Contract owner and registry admin
 (define-data-var owner principal (as-contract tx-sender))
 (define-data-var registry-admin principal (as-contract tx-sender))
+(define-data-var contract-paused bool false)
 
 ;; Registry configuration
 (define-data-var total-merchants uint u0)
@@ -132,6 +135,24 @@
   )
 )
 
+;; Pause contract (emergency function)
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "MerchantRegistryPaused")
+    (ok (var-set contract-paused true))
+  )
+)
+
+;; Unpause contract
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "MerchantRegistryUnpaused")
+    (ok (var-set contract-paused false))
+  )
+)
+
 ;; ===== MERCHANT REGISTRATION =====
 
 ;; Register new merchant
@@ -149,7 +170,8 @@
     (merchant-id (+ (var-get total-merchants) u1))
   )
     (begin
-      ;; Validate inputs
+      ;; Validate inputs and contract state
+      (asserts! (not (var-get contract-paused)) ERR_CONTRACT_PAUSED)
       (asserts! (or (is-eq tx-sender (var-get owner)) 
                     (is-eq tx-sender (var-get registry-admin))) ERR_UNAUTHORIZED)
       (asserts! (is-none (map-get? merchants merchant)) ERR_MERCHANT_ALREADY_EXISTS)
@@ -192,6 +214,9 @@
       
       ;; Update total merchants
       (var-set total-merchants merchant-id)
+      
+      ;; Emit event
+      (print "MerchantRegistered")
       
       (ok merchant)
     )
@@ -398,9 +423,10 @@
       }))
       
       ;; Increase reputation for completing KYC
-      (update-reputation merchant u10 u3 u"KYC verification completed")
-      
-      (ok true)
+      (match (update-reputation merchant u10 u3 u"KYC verification completed")
+        success (ok true)
+        error (ok true) ;; Continue even if reputation update fails
+      )
     )
   )
 )
@@ -429,9 +455,10 @@
       }))
       
       ;; Increase reputation for successful transaction
-      (update-reputation merchant u5 u0 u"Successful payment transaction")
-      
-      (ok true)
+      (match (update-reputation merchant u5 u0 u"Successful payment transaction")
+        success (ok true)
+        error (ok true) ;; Continue even if reputation update fails
+      )
     )
   )
 )

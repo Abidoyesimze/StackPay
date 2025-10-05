@@ -8,6 +8,7 @@
 (define-constant ERR_PROPOSAL_NOT_FOUND (err u104))
 (define-constant ERR_PROPOSAL_EXPIRED (err u105))
 (define-constant ERR_ALREADY_VOTED (err u106))
+(define-constant ERR_CONTRACT_PAUSED (err u107))
 
 ;; Proposal types
 (define-constant PROPOSAL_WITHDRAWAL u0)
@@ -25,6 +26,7 @@
 ;; Contract owner and treasury admin
 (define-data-var owner principal (as-contract tx-sender))
 (define-data-var treasury-admin principal (as-contract tx-sender))
+(define-data-var contract-paused bool false)
 
 ;; Multi-sig configuration
 (define-data-var total-signers uint u3)
@@ -134,6 +136,24 @@
     (var-set daily-withdrawal-limit daily-limit)
     (var-set emergency-reserve emergency-reserve-amount)
     (ok true)
+  )
+)
+
+;; Pause contract (emergency function)
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "TreasuryPaused")
+    (ok (var-set contract-paused true))
+  )
+)
+
+;; Unpause contract
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "TreasuryUnpaused")
+    (ok (var-set contract-paused false))
   )
 )
 
@@ -323,13 +343,13 @@
 )
   (let (
     (current-time u0) ;; Simplified for now
-    (emergency-timeout (var-get emergency-timeout))
+    (emergency-timeout-duration (var-get emergency-timeout))
     (emergency-age (- current-time (var-get emergency-initiated-at)))
   )
     (begin
       ;; Validate inputs
       (asserts! (var-get emergency-mode) ERR_UNAUTHORIZED)
-      (asserts! (< emergency-age emergency-timeout) ERR_PROPOSAL_EXPIRED)
+      (asserts! (< emergency-age emergency-timeout-duration) ERR_PROPOSAL_EXPIRED)
       (asserts! (is-eq (map-get? signers tx-sender) (some true)) ERR_UNAUTHORIZED)
       (asserts! (> amount u0) ERR_INVALID_AMOUNT)
       (asserts! (<= amount (var-get treasury-balance)) ERR_INSUFFICIENT_BALANCE)

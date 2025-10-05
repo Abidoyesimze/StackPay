@@ -7,6 +7,8 @@
 (define-constant ERR_ORACLE_NOT_FOUND (err u103))
 (define-constant ERR_INVALID_TIMESTAMP (err u104))
 (define-constant ERR_PRICE_OUT_OF_RANGE (err u105))
+(define-constant ERR_CONTRACT_PAUSED (err u106))
+(define-constant ERR_INVALID_CONFIDENCE (err u107))
 
 ;; Oracle types
 (define-constant ORACLE_PRICE u0)
@@ -20,6 +22,7 @@
 ;; Contract owner and oracle admin
 (define-data-var owner principal (as-contract tx-sender))
 (define-data-var oracle-admin principal (as-contract tx-sender))
+(define-data-var contract-paused bool false)
 
 ;; Oracle configuration
 (define-data-var price-update-interval uint PRICE_UPDATE_INTERVAL)
@@ -138,6 +141,24 @@
     })
     
     (ok true)
+  )
+)
+
+;; Pause contract (emergency function)
+(define-public (pause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "OracleIntegrationPaused")
+    (ok (var-set contract-paused true))
+  )
+)
+
+;; Unpause contract
+(define-public (unpause-contract)
+  (begin
+    (asserts! (is-eq tx-sender (var-get owner)) ERR_UNAUTHORIZED)
+    (print "OracleIntegrationUnpaused")
+    (ok (var-set contract-paused false))
   )
 )
 
