@@ -1,0 +1,60 @@
+# StackPay Documentation
+
+Welcome to the StackPay documentation. StackPay is a Bitcoin payment gateway for small businesses - the Stripe of Bitcoin.
+
+## Getting Started
+
+### Installation
+
+```bash
+npm install @stackspay/sdk
+```
+
+### Basic Usage
+
+```typescript
+import { StacksPaySDK } from '@stackspay/sdk';
+
+const sdk = new StacksPaySDK('your-api-key');
+
+// Create a payment
+const payment = await sdk.createPayment({
+  amount: 100000, // satoshis
+  currency: 'BTC',
+  description: 'Coffee purchase'
+});
+```
+
+## Components
+
+StackPay provides a set of React components for easy integration:
+
+```tsx
+import { PaymentWidget } from '@stackspay/widget';
+
+function CheckoutPage() {
+  return (
+    <PaymentWidget
+      apiKey="your-api-key"
+      amount={100000}
+      description="Coffee purchase"
+    />
+  );
+}
+```
+
+## API Reference
+
+### StacksPaySDK
+
+The main SDK class for interacting with the StackPay API.
+
+#### Methods
+
+- `createPayment(request: PaymentRequest): Promise<PaymentResponse>`
+- `getPaymentStatus(paymentId: string): Promise<PaymentStatusResponse>`
+- `cancelPayment(paymentId: string): Promise<void>`
+
+## Support
+
+For support, please contact us at support@stackspay.com or join our Discord community.

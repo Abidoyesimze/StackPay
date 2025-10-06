@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["DOM", "DOM.Iterable", "ES2020"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@stackspay/ui": ["./packages/ui/src"],
+      "@stackspay/ui/*": ["./packages/ui/src/*"],
+      "@stackspay/utils": ["./packages/utils/src"],
+      "@stackspay/utils/*": ["./packages/utils/src/*"],
+      "@stackspay/sdk": ["./packages/sdk/src"],
+      "@stackspay/sdk/*": ["./packages/sdk/src/*"],
+      "@stackspay/widget": ["./packages/widget/src"],
+      "@stackspay/widget/*": ["./packages/widget/src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".next"
+  ]
+}

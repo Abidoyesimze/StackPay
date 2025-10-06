@@ -1,14 +1,19 @@
 
 {
-  "name": "stackspay-contracts-tests",
+  "name": "@stackspay/contracts",
   "version": "1.0.0",
   "description": "Run unit tests on this project.",
   "type": "module",
   "private": true,
   "scripts": {
+    "dev": "vitest run --watch",
+    "build": "echo 'No build step needed for contracts'",
     "test": "vitest run",
     "test:report": "vitest run -- --coverage --costs",
-    "test:watch": "chokidar \"tests/**/*.ts\" \"contracts/**/*.clar\" -c \"npm run test:report\""
+    "test:watch": "chokidar \"tests/**/*.ts\" \"contracts/**/*.clar\" -c \"npm run test:report\"",
+    "lint": "echo 'No linting configured for contracts'",
+    "type-check": "tsc --noEmit",
+    "clean": "echo 'No cleanup needed'"
   },
   "author": "",
   "license": "ISC",

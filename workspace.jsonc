@@ -1,0 +1,42 @@
+{
+  "$schema": "https://raw.githubusercontent.com/teambit/bit/HEAD/workspace-config-schema.json",
+  "teambit.workspace/workspace": {
+    "name": "stackspay.ui",
+    "icon": "https://static.bit.dev/bit-logo.svg",
+    "defaultDirectory": "{scope}/{name}",
+    "defaultScope": "stackspay.ui"
+  },
+  "teambit.workspace/variants": {
+    "packages/ui": {
+      "teambit.react/react": {},
+      "teambit.react/react-native": {},
+      "teambit.dependencies/dependency-resolver": {
+        "policy": {
+          "peerDependencies": {
+            "react": "^18.0.0",
+            "react-dom": "^18.0.0"
+          }
+        }
+      }
+    },
+    "packages/sdk": {
+      "teambit.harmony/node": {},
+      "teambit.dependencies/dependency-resolver": {}
+    },
+    "packages/utils": {
+      "teambit.harmony/node": {},
+      "teambit.dependencies/dependency-resolver": {}
+    },
+    "packages/widget": {
+      "teambit.react/react": {},
+      "teambit.dependencies/dependency-resolver": {
+        "policy": {
+          "peerDependencies": {
+            "react": "^18.0.0",
+            "react-dom": "^18.0.0"
+          }
+        }
+      }
+    }
+  }
+}

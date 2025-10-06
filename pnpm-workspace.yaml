@@ -1,0 +1,7 @@
+packages:
+  # Apps
+  - 'apps/*'
+  # Packages
+  - 'packages/*'
+  # Smart contracts
+  - 'smartcontracts'
