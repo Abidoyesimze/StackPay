@@ -1,0 +1,36 @@
+# Sevalla Redis configuration for StackPay
+name: stackspay-redis
+type: redis
+version: "7"
+
+# Redis configuration
+redis:
+  maxmemory: 256mb
+  maxmemory_policy: allkeys-lru
+  timeout: 300
+  tcp_keepalive: 60
+
+# Persistence
+persistence:
+  enabled: true
+  save: "900 1 300 10 60 10000"
+  rdb_compression: yes
+  rdb_checksum: yes
+
+# Security
+security:
+  password_required: true
+  ip_allowlist: []
+
+# Monitoring
+monitoring:
+  enabled: true
+  slowlog_log_slower_than: 10000
+  slowlog_max_len: 128
+
+# Environment variables that will be automatically set
+env:
+  REDIS_URL: redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}
+  REDIS_HOST: ${REDIS_HOST}
+  REDIS_PORT: ${REDIS_PORT}
+  REDIS_PASSWORD: ${REDIS_PASSWORD}

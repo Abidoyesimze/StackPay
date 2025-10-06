@@ -1,0 +1,42 @@
+# Sevalla database configuration for StackPay
+name: stackspay-database
+type: postgresql
+version: "15"
+
+# Database configuration
+database:
+  name: stackspay
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
+
+# Backup configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention: 30  # Keep backups for 30 days
+
+# Scaling configuration
+scaling:
+  plan: standard
+  storage: 20Gi
+  connections: 100
+
+# Security
+security:
+  ssl_enforcement: true
+  ip_allowlist: []
+
+# Monitoring
+monitoring:
+  enabled: true
+  slow_query_log: true
+  query_timeout: 30s
+
+# Environment variables that will be automatically set
+env:
+  DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+  DB_HOST: ${DB_HOST}
+  DB_PORT: ${DB_PORT}
+  DB_NAME: ${DB_NAME}
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}

@@ -1,0 +1,148 @@
+name: Deploy to Sevalla
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Run tests
+        run: pnpm test
+        
+      - name: Run linting
+        run: pnpm lint
+
+  deploy-backend-sevalla:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy to Sevalla
+        uses: sevalla/deploy-action@v1
+        with:
+          sevalla-token: ${{ secrets.SEVALLA_TOKEN }}
+          app-name: stackspay-backend
+          config-file: apps/backend/sevalla.yaml
+          environment: production
+
+  deploy-database-sevalla:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Database to Sevalla
+        uses: sevalla/database-action@v1
+        with:
+          sevalla-token: ${{ secrets.SEVALLA_TOKEN }}
+          database-name: stackspay-database
+          config-file: apps/backend/sevalla-database.yaml
+
+  deploy-redis-sevalla:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Redis to Sevalla
+        uses: sevalla/redis-action@v1
+        with:
+          sevalla-token: ${{ secrets.SEVALLA_TOKEN }}
+          redis-name: stackspay-redis
+          config-file: apps/backend/sevalla-redis.yaml
+
+  deploy-dashboard:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Dashboard to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_DASHBOARD_PROJECT_ID }}
+          working-directory: ./apps/dashboard
+          vercel-args: '--prod'
+
+  deploy-docs:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Deploy Docs to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_DOCS_PROJECT_ID }}
+          working-directory: ./apps/docs
+          vercel-args: '--prod'
+
+  publish-packages:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && vars.PUBLISH_PACKAGES == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build packages
+        run: pnpm build
+        
+      - name: Publish packages
+        run: |
+          pnpm --filter "@stackspay/ui" publish --access public
+          pnpm --filter "@stackspay/utils" publish --access public
+          pnpm --filter "@stackspay/sdk" publish --access public
+          pnpm --filter "@stackspay/widget" publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
