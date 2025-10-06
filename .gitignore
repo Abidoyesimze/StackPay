@@ -80,6 +80,17 @@ jspm_packages/
 .clarinet/
 .clarinet/
 
+# Security and secrets
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+.secrets/
+mnemonic.txt
+wallet.json
+*.wallet
+
 # Temporary folders
 tmp/
 temp/
