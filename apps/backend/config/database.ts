@@ -1,4 +1,4 @@
-import { Pool, PoolClient } from '../node_modules/@types/pg';
+import { Pool, PoolClient } from 'pg';
 import { config } from './env';
 import { logger } from '../utils/logger';
 

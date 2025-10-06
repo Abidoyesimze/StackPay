@@ -1,10 +1,11 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,9 +14,19 @@
     "moduleResolution": "node",
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "typeRoots": ["./src/types", "./node_modules/@types"]
+    "sourceMap": true
   },
-  "include": ["src/**/*", "src/types/**/*.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "app.ts",
+    "config/**/*",
+    "middleware/**/*",
+    "models/**/*",
+    "routes/**/*",
+    "services/**/*",
+    "utils/**/*",
+    "workers/**/*",
+    "scripts/**/*",
+    "types/**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "dist", "*.test.ts", "*.spec.ts"]
 }
