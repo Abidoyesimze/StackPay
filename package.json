@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "start": "cd apps/backend && node dist/app.js",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "type-check": "turbo run type-check",
