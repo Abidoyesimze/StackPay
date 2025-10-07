@@ -6,11 +6,11 @@ version: 18
 
 # Build configuration
 build:
-  command: pnpm install && pnpm build --filter=@stackspay/backend
+  command: pnpm install && pnpm build
   dockerfile: apps/backend/Dockerfile
   
 # Start command
-start: node dist/app.js
+start: pnpm start
 
 # Port configuration
 port: 3001
