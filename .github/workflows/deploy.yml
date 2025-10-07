@@ -1,67 +1,45 @@
-name: Deploy to Sevalla
+name: Deploy to Sevella & Vercel
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v2
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
-          
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        
-      - name: Build packages
-        run: pnpm build
-        
-      - name: Run tests
-        run: pnpm test
-        
-      - name: Run linting
-        run: pnpm lint
+      - name: Restore pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm install --frozen-lockfile --recursive
+      - run: pnpm build
+      - run: pnpm test
+      - run: pnpm lint
 
-  deploy-backend-sevalla:
+  deploy-backend-sevella:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        
-      - name: Build backend
-        run: pnpm build --filter=@stackspay/backend
-      
-      - name: Deploy to Sevalla
+      - uses: pnpm/action-setup@v2
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: pnpm install --frozen-lockfile --recursive
+      - run: pnpm --filter @stackspay/backend build
+      - name: Deploy to Sevella
         uses: sevalla-hosting/sevalla-deploy@v1.0.0
         with:
           action: deploy-app
@@ -71,60 +49,17 @@ jobs:
           is-restart: false
           wait-for-finish: true
 
-  # Database deployment is handled through Sevalla dashboard or API
-  # deploy-database-sevalla:
-  #   needs: build-and-test
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     
-  #     - name: Deploy Database to Sevalla
-  #       run: |
-  #         # Database deployment via API or manual setup
-  #         echo "Database deployment handled separately"
-
-  # Redis deployment is handled through Sevalla dashboard or API
-  # deploy-redis-sevalla:
-  #   needs: build-and-test
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     
-  #     - name: Deploy Redis to Sevalla
-  #       run: |
-  #         # Redis deployment via API or manual setup
-  #         echo "Redis deployment handled separately"
-
   deploy-dashboard:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
-        
-      - name: Deploy Dashboard to Vercel
-        run: |
-          cd apps/dashboard
-          # Install dependencies from root to handle workspace protocol
-          cd ../..
-          pnpm install --frozen-lockfile
-          cd apps/dashboard
-          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --confirm
+      - uses: pnpm/action-setup@v2
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: pnpm install --frozen-lockfile --recursive
+      - run: vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --cwd apps/dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_DASHBOARD_PROJECT_ID }}
@@ -132,65 +67,14 @@ jobs:
   deploy-docs:
     needs: build-and-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
-        
-      - name: Deploy Docs to Vercel
-        run: |
-          cd apps/docs
-          # Install dependencies from root to handle workspace protocol
-          cd ../..
-          pnpm install --frozen-lockfile
-          cd apps/docs
-          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --confirm
+      - uses: pnpm/action-setup@v2
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: pnpm install --frozen-lockfile --recursive
+      - run: vercel deploy --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --cwd apps/docs
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_DOCS_PROJECT_ID }}
-
-  publish-packages:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && vars.PUBLISH_PACKAGES == 'true'
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
-          
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        
-      - name: Build packages
-        run: pnpm build
-        
-      - name: Publish packages
-        run: |
-          pnpm --filter "@stackspay/ui" publish --access public
-          pnpm --filter "@stackspay/utils" publish --access public
-          pnpm --filter "@stackspay/sdk" publish --access public
-          pnpm --filter "@stackspay/widget" publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
