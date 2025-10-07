@@ -10,7 +10,7 @@
     "worker:monitor": "ts-node workers/payment-monitor.ts",
     "db:migrate": "ts-node scripts/migrate.ts",
     "test": "jest",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings 0 --ignore-pattern dist/",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf dist"
   },

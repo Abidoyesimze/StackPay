@@ -5,7 +5,6 @@ import {
   PostConditionMode,
   standardPrincipalCV,
   uintCV,
-  makeSTXTokenTransfer,
   getAddressFromPrivateKey,
 } from '@stacks/transactions';
 import { AccountsApi, Configuration, TransactionsApi } from '@stacks/blockchain-api-client';

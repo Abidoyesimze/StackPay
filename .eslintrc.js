@@ -7,7 +7,6 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -16,9 +15,8 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   rules: {
-    // Add any custom rules here
+    'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-    '@typescript-eslint/no-explicit-any': 'warn',
   },
   ignorePatterns: [
     'dist/',

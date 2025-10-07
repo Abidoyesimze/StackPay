@@ -1,4 +1,4 @@
-import { PaymentRequest, PaymentResponse, PaymentStatus, PaymentStatusResponse } from './types';
+import { PaymentRequest, PaymentResponse, PaymentStatusResponse } from './types';
 
 export class StacksPaySDK {
   private apiKey: string;
