@@ -45,6 +45,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Build backend
+        run: pnpm build --filter=@stackspay/backend
+      
       - name: Deploy to Sevalla
         uses: sevalla-hosting/sevalla-deploy@v1.0.0
         with:
@@ -93,11 +109,20 @@ jobs:
         with:
           node-version: '18'
           
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
         
       - name: Deploy Dashboard to Vercel
         run: |
+          cd apps/dashboard
+          # Install dependencies from root to handle workspace protocol
+          cd ../..
+          pnpm install --frozen-lockfile
           cd apps/dashboard
           vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --confirm
         env:
@@ -116,11 +141,20 @@ jobs:
         with:
           node-version: '18'
           
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
       - name: Install Vercel CLI
         run: npm install -g vercel@latest
         
       - name: Deploy Docs to Vercel
         run: |
+          cd apps/docs
+          # Install dependencies from root to handle workspace protocol
+          cd ../..
+          pnpm install --frozen-lockfile
           cd apps/docs
           vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --confirm
         env:
