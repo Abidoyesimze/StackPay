@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "StacksPay Bitcoin Payment Gateway Backend",
   "main": "dist/app.js",
+  "packageManager": "pnpm@8.15.0",
   "scripts": {
     "dev": "nodemon --exec ts-node app.ts",
     "build": "tsc",
