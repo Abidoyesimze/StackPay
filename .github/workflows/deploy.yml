@@ -48,38 +48,38 @@ jobs:
       - name: Deploy to Sevalla
         uses: sevalla-hosting/sevalla-deploy@v1.0.0
         with:
-          kinsta-token: ${{ secrets.SEVALLA_TOKEN }}
-          app-name: stackspay-backend
-          config-file: apps/backend/sevalla.yaml
-          environment: production
+          action: deploy-app
+          sevalla-token: ${{ secrets.SEVALLA_TOKEN }}
+          app-id: ${{ secrets.SEVALLA_APP_ID }}
+          branch: main
+          is-restart: false
+          wait-for-finish: true
 
-  deploy-database-sevalla:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy Database to Sevalla
-        uses: sevalla-hosting/sevalla-deploy@v1.0.0
-        with:
-          kinsta-token: ${{ secrets.SEVALLA_TOKEN }}
-          database-name: stackspay-database
-          config-file: apps/backend/sevalla-database.yaml
+  # Database deployment is handled through Sevalla dashboard or API
+  # deploy-database-sevalla:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     
+  #     - name: Deploy Database to Sevalla
+  #       run: |
+  #         # Database deployment via API or manual setup
+  #         echo "Database deployment handled separately"
 
-  deploy-redis-sevalla:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Deploy Redis to Sevalla
-        uses: sevalla-hosting/sevalla-deploy@v1.0.0
-        with:
-          kinsta-token: ${{ secrets.SEVALLA_TOKEN }}
-          redis-name: stackspay-redis
-          config-file: apps/backend/sevalla-redis.yaml
+  # Redis deployment is handled through Sevalla dashboard or API
+  # deploy-redis-sevalla:
+  #   needs: build-and-test
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     
+  #     - name: Deploy Redis to Sevalla
+  #       run: |
+  #         # Redis deployment via API or manual setup
+  #         echo "Redis deployment handled separately"
 
   deploy-dashboard:
     needs: build-and-test
@@ -88,14 +88,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Deploy Dashboard to Vercel
-        uses: amondnet/vercel-action@v25
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_DASHBOARD_PROJECT_ID }}
-          working-directory: ./apps/dashboard
-          vercel-args: '--prod Y --confirm'
+          node-version: '18'
+          
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+        
+      - name: Deploy Dashboard to Vercel
+        run: |
+          cd apps/dashboard
+          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --confirm
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_DASHBOARD_PROJECT_ID }}
 
   deploy-docs:
     needs: build-and-test
@@ -104,14 +111,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Deploy Docs to Vercel
-        uses: amondnet/vercel-action@v25
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_DOCS_PROJECT_ID }}
-          working-directory: ./apps/docs
-          vercel-args: '--prod Y --confirm'
+          node-version: '18'
+          
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+        
+      - name: Deploy Docs to Vercel
+        run: |
+          cd apps/docs
+          vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --yes --confirm
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_DOCS_PROJECT_ID }}
 
   publish-packages:
     needs: build-and-test
