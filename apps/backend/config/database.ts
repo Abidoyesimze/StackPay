@@ -6,15 +6,32 @@ class Database {
   private pool: Pool;
 
   constructor() {
+    // Use connection string if available, otherwise use individual parameters
+    const poolConfig = config.database.url 
+      ? {
+          connectionString: config.database.url,
+          ssl: config.database.ssl ? {
+            rejectUnauthorized: false, // For cloud databases like Aiven/Neon
+            checkServerIdentity: () => undefined, // Skip hostname verification
+          } : false,
+        }
+      : {
+          host: config.database.host,
+          port: config.database.port,
+          database: config.database.name,
+          user: config.database.user,
+          password: config.database.password,
+          ssl: config.database.ssl ? {
+            rejectUnauthorized: false, // For cloud databases like Aiven/Neon
+            checkServerIdentity: () => undefined, // Skip hostname verification
+          } : false,
+        };
+
     this.pool = new Pool({
-      host: config.database.host,
-      port: config.database.port,
-      database: config.database.name,
-      user: config.database.user,
-      password: config.database.password,
+      ...poolConfig,
       max: 20,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 2000,
+      connectionTimeoutMillis: 10000, // Increased timeout for cloud databases
     });
 
     this.pool.on('error', (err: Error) => {
