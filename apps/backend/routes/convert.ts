@@ -10,7 +10,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-const router = Router();
+const router: Router = Router();
 
 // POST /convert/usd-to-btc
 router.post(

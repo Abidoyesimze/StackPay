@@ -1,4 +1,4 @@
-import { createClient } from 'redis';
+import { createClient, RedisClientType } from 'redis';
 import { config } from './env';
 import { logger } from '../utils/logger';
 
@@ -63,7 +63,7 @@ class RedisClient {
     return result === 1;
   }
 
-  getClient() {
+  getClient(): RedisClientType {
     return this.client;
   }
 

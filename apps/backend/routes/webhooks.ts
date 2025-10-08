@@ -11,7 +11,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-const router = Router();
+const router: Router = Router();
 
 // POST /webhooks - Register webhook URL
 router.post(
