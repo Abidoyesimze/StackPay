@@ -9,8 +9,8 @@ WORKDIR /app
 # --- Dependencies stage ---
 FROM base AS dependencies
 
-# Copy workspace configuration
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
+# Copy workspace configuration (REQUIRED for monorepo)
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 
 # Copy all package.json files for proper dependency resolution
 COPY apps/backend/package.json ./apps/backend/
@@ -41,8 +41,8 @@ RUN addgroup -g 1001 -S nodejs && adduser -S stackspay -u 1001
 
 WORKDIR /app
 
-# Copy workspace configuration
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
+# Copy workspace configuration (REQUIRED for monorepo)
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 
 # Copy package manifests
 COPY apps/backend/package.json ./apps/backend/
