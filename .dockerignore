@@ -117,6 +117,4 @@ __tests__/
 .eslintrc*
 .prettierrc*
 
-# TypeScript
-tsconfig.json
-tsconfig.*.json
+
