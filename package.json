@@ -50,10 +50,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/stackspay.git"
+    "url": "https://github.com/dotunv/stackspay.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/stackspay/issues"
+    "url": "https://github.com/dotunv/stackspay/issues"
   },
   "homepage": "https://stackspay.com"
 }
