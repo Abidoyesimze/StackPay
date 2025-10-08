@@ -23,7 +23,9 @@ FROM base AS build
 # Copy all necessary source files for build
 COPY . .
 
-# Build backend from root context using workspace filter
+RUN pnpm install --frozen-lockfile --recursive
+
+# ✅ Build backend specifically
 RUN pnpm --filter @stackspay/backend run build
 
 # --- Production stage ---
