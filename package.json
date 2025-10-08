@@ -23,7 +23,10 @@
     "bit:export": "bit export",
     "bit:build": "bit build",
     "bit:tag": "bit tag",
-    "bit:install": "bit install"
+    "bit:install": "bit install",
+    "heroku-build": "npm_config_production=false pnpm install && pnpm --filter @stackspay/backend build"
+    
+
   },
   "devDependencies": {
     "@turbo/gen": "^1.12.4",
