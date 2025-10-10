@@ -17,6 +17,7 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.docker
 
 # IDE files
 .vscode/
@@ -103,6 +104,7 @@ docker-compose*
 # Documentation
 README.md
 SETUP.md
+README.Docker.md
 *.md
 
 # Test files
@@ -117,4 +119,12 @@ __tests__/
 .eslintrc*
 .prettierrc*
 
+# Development files
+.koyeb/
+scripts/
+smartcontracts/
 
+# Apps that aren't being built
+apps/dashboard/
+apps/docs/
+apps/frontend/

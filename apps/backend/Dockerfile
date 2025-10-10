@@ -28,6 +28,7 @@ FROM dependencies AS build
 COPY apps/backend ./apps/backend
 COPY packages ./packages
 COPY turbo.json* ./
+COPY tsconfig.base.json ./
 
 # Build the backend
 RUN pnpm --filter @stackspay/backend run build
