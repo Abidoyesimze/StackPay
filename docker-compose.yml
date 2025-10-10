@@ -7,18 +7,20 @@ services:
     container_name: stackspay-postgres
     environment:
       POSTGRES_DB: stackspay
-      POSTGRES_USER: stackspay
-      POSTGRES_PASSWORD: stackspay_password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U stackspay -d stackspay"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - stackspay-network
 
   # Redis Cache
   redis:
@@ -33,57 +35,87 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - stackspay-network
 
-  # Backend API
+  # StackPay Backend API
   backend:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
     container_name: stackspay-backend
-    ports:
-      - "3001:3001"
     environment:
-      - NODE_ENV=development
-      - PORT=3001
-      - DATABASE_URL=postgresql://stackspay:stackspay_password@postgres:5432/stackspay
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=dev-jwt-secret-change-in-production
-      - API_KEY_SECRET=dev-api-secret-change-in-production
-      - STACKS_NETWORK=testnet
-      - CORS_ORIGIN=http://localhost:3000,http://localhost:3001
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: stackspay
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
+      STACKS_NETWORK: testnet
+      STACKS_API_URL: https://api.testnet.hiro.so
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production
+      RATE_LIMIT_WINDOW_MS: 900000
+      RATE_LIMIT_MAX_REQUESTS: 100
+      MIN_CONFIRMATIONS: 3
+      INVOICE_EXPIRY_MINUTES: 30
+      PAYMENT_POLL_INTERVAL_MS: 10000
+      BTC_PRICE_API: https://api.coinbase.com/v2/exchange-rates?currency=BTC
+    ports:
+      - "3000:3000"
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes:
-      - ./apps/backend:/app/apps/backend
-      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - stackspay-network
     restart: unless-stopped
 
-  # Dashboard (Development)
-  dashboard:
+  # Payment Monitor Worker
+  payment-monitor:
     build:
       context: .
-      dockerfile: apps/dashboard/Dockerfile.dev
-    container_name: stackspay-dashboard
-    ports:
-      - "3000:3000"
+      dockerfile: apps/backend/Dockerfile
+    container_name: stackspay-payment-monitor
+    command: ["node", "dist/workers/payment-monitor.js"]
     environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
-      - NEXT_PUBLIC_STACKS_NETWORK=testnet
+      NODE_ENV: production
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: stackspay
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
+      STACKS_NETWORK: testnet
+      STACKS_API_URL: https://api.testnet.hiro.so
+      MIN_CONFIRMATIONS: 3
+      PAYMENT_POLL_INTERVAL_MS: 10000
     depends_on:
-      - backend
-    volumes:
-      - ./apps/dashboard:/app/apps/dashboard
-      - /app/node_modules
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - stackspay-network
     restart: unless-stopped
 
 volumes:
   postgres_data:
+    driver: local
   redis_data:
+    driver: local
 
 networks:
-  default:
-    name: stackspay-network
+  stackspay-network:
+    driver: bridge

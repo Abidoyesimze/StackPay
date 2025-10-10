@@ -1,0 +1,71 @@
+# StacksPay Koyeb Environment Variables Template
+# Copy this file and update the values for your deployment
+
+# Required secrets to create in Koyeb before deployment:
+# Use: koyeb secrets create <SECRET_NAME> <VALUE>
+
+# Database Configuration
+# Server Configuration
+NODE_ENV:development
+PORT:3000
+API_BASE_URL:http://localhost:3000
+
+# Database Configuration
+
+
+# Redis Cloud Configuration
+REDIS_HOST:redis-13913.c281.us-east-1-2.ec2.redns.redis-cloud.com
+REDIS_PORT:13913
+REDIS_USERNAME:default
+REDIS_PASSWORD:zUp9AyP6hJmmB5EfzdKCW3s8nxqgvpT2
+
+# Stacks Network Configuration
+STACKS_NETWORK:testnet
+CONTRACT_ADDRESS:
+CONTRACT_NAME:stackspay-escrow
+ESCROW_PRIVATE_KEY:
+STACKS_API_URL:https://api.testnet.hiro.so
+
+# Security Configuration
+JWT_SECRET:XYI5tmfGsVrbLuwLT7K5QcP3GFW5XmmJJd9CqaoOjLY:
+
+# Rate Limiting
+RATE_LIMIT_WINDOW_MS:900000
+RATE_LIMIT_MAX_REQUESTS:100
+
+# Payment Configuration
+MIN_CONFIRMATIONS:3
+INVOICE_EXPIRY_MINUTES:30
+PAYMENT_POLL_INTERVAL_MS:10000
+
+# External APIs
+BTC_PRICE_API:https://api.coinbase.com/v2/exchange-rates?currency:BTC
+
+# CORS Configuration
+ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001
+DATABASE_SSL:true
+DATABASE_URL:'postgresql://neondb_owner:npg_E1L5JwknZoxY@ep-fragrant-resonance-adfevuhi-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+
+
+# API Keys (if needed)
+# Add any third-party API keys your application requires
+# SOME_API_KEY: "your-api-key"
+
+# Optional: Custom domain configuration
+# If you want to use a custom domain instead of *.koyeb.app
+# CUSTOM_DOMAIN: "api.stackspay.com"
+
+# Koyeb CLI Commands to create secrets:
+# Production secrets:
+# koyeb secrets create DATABASE_URL "postgresql://..."
+# koyeb secrets create REDIS_URL "redis://..."
+# koyeb secrets create JWT_SECRET "your-jwt-secret"
+# koyeb secrets create ENCRYPTION_KEY "your-encryption-key"
+# koyeb secrets create WEBHOOK_SECRET "your-webhook-secret"
+
+# Staging secrets:
+# koyeb secrets create DATABASE_URL_STAGING "postgresql://..."
+# koyeb secrets create REDIS_URL_STAGING "redis://..."
+# koyeb secrets create JWT_SECRET_STAGING "your-staging-jwt-secret"
+# koyeb secrets create ENCRYPTION_KEY_STAGING "your-staging-encryption-key"
+# koyeb secrets create WEBHOOK_SECRET_STAGING "your-staging-webhook-secret"

@@ -22,7 +22,7 @@ export function PaymentWidget({
 }: PaymentWidgetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentAddress, setPaymentAddress] = useState<string>('');
-  const [paymentId, setPaymentId] = useState<string>('');
+  const [, setPaymentId] = useState<string>('');
 
   const sdk = new StacksPaySDK(apiKey);
 

@@ -1,16 +1,30 @@
-import { createClient } from 'redis';
+import { createClient, RedisClientType } from 'redis';
 import { config } from './env';
 import { logger } from '../utils/logger';
 
 class RedisClient {
-  private client;
+  private client: ReturnType<typeof createClient>;
   private isConnected = false;
 
   constructor() {
-    this.client = createClient({
-      url: config.redis.url,
-      password: config.redis.password,
-    });
+    // Support both URL format and individual parameters for Redis Cloud
+    // Prefer individual parameters if they're explicitly set (not defaults)
+    const useIndividualParams = config.redis.host !== 'localhost' || 
+                               config.redis.port !== 6379 || 
+                               config.redis.password;
+    
+    const redisConfig = useIndividualParams
+      ? {
+          username: config.redis.username || 'default',
+          password: config.redis.password,
+          socket: {
+            host: config.redis.host,
+            port: config.redis.port,
+          },
+        }
+      : { url: config.redis.url };
+
+    this.client = createClient(redisConfig);
 
     this.client.on('error', (err) => {
       logger.error('Redis Client Error', err);

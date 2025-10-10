@@ -1,2 +1,3 @@
 export { StacksPaySDK } from './sdk';
-export { PaymentRequest, PaymentStatus } from './types';
+export type { PaymentRequest, PaymentStatus } from './types';
+export type { PaymentResponse, PaymentStatusResponse } from './types';

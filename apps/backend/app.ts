@@ -14,7 +14,7 @@ import webhookRoutes from './routes/webhooks';
 import paymentRoutes from './routes/payments';
 import convertRoutes from './routes/convert';
 
-const app = express();
+const app: express.Application = express();
 
 // Security middleware
 app.use(helmet());

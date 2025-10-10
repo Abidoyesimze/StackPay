@@ -11,7 +11,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-const router = Router();
+const router: Router = Router();
 const invoiceService = new InvoiceService();
 
 // POST /invoices - Create new invoice

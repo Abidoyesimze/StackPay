@@ -1,4 +1,4 @@
-import { Merchant } from '../models/merchant.model';
+// import { Merchant } from '../models/merchant.model';
 
 declare global {
   namespace Express {

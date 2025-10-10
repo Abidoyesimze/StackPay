@@ -10,7 +10,7 @@ interface AuthenticatedRequest extends Request {
   };
 }
 
-const router = Router();
+const router: Router = Router();
 const invoiceService = new InvoiceService();
 
 // GET /payments - List all payments (alias for invoices)

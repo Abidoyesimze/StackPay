@@ -22,10 +22,12 @@ export const config = {
     user: process.env.DATABASE_USER || 'postgres',
     password: process.env.DATABASE_PASSWORD || 'postgres',
     url: process.env.DATABASE_URL || '',
+    ssl: process.env.DATABASE_SSL === 'true' || false,
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    username: process.env.REDIS_USERNAME || 'default',
     password: process.env.REDIS_PASSWORD,
     url: process.env.REDIS_URL || 'redis://localhost:6379',
   },

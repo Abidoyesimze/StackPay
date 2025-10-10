@@ -11,8 +11,8 @@ interface PaymentButtonProps {
 
 export function PaymentButton({
   amount,
-  currency = 'BTC',
-  description,
+  currency: _currency = 'BTC',
+  description: _description,
   onPaymentClick,
   className,
 }: PaymentButtonProps) {
