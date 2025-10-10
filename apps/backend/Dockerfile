@@ -1,8 +1,10 @@
 # --- Base stage ---
 FROM node:20-alpine AS base
 
-# Install pnpm globally
-RUN npm install -g pnpm@8.15.0
+# Install pnpm globally and security updates
+RUN apk add --no-cache dumb-init \
+    && npm install -g pnpm@8.15.0 \
+    && npm cache clean --force
 
 WORKDIR /app
 
@@ -36,8 +38,12 @@ RUN ls -la /app/apps/backend/dist || (echo "Build failed - dist directory not fo
 # --- Production stage ---
 FROM node:20-alpine AS production
 
-RUN npm install -g pnpm@8.15.0
-RUN addgroup -g 1001 -S nodejs && adduser -S stackspay -u 1001
+# Install production dependencies and security updates
+RUN apk add --no-cache dumb-init \
+    && npm install -g pnpm@8.15.0 \
+    && npm cache clean --force \
+    && addgroup -g 1001 -S nodejs \
+    && adduser -S stackspay -u 1001
 
 WORKDIR /app
 
@@ -65,10 +71,10 @@ USER stackspay
 # Expose port
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+# Health check optimized for Koyeb
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"
 
-# Start app
+# Start app with dumb-init for better signal handling
 WORKDIR /app/apps/backend
-CMD ["node", "dist/app.js"]
+CMD ["dumb-init", "node", "dist/app.js"]

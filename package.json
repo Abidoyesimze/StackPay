@@ -24,8 +24,14 @@
     "bit:build": "bit build",
     "bit:tag": "bit tag",
     "bit:install": "bit install",
-    "heroku-build": "npm_config_production=false pnpm install && pnpm --filter @stackspay/backend build"
-    
+    "heroku-build": "npm_config_production=false pnpm install && pnpm --filter @stackspay/backend build",
+    "koyeb:deploy": "./.koyeb/deploy.sh",
+    "koyeb:deploy:staging": "./.koyeb/deploy.sh -e staging",
+    "koyeb:deploy:production": "./.koyeb/deploy.sh -e production",
+    "koyeb:logs": "koyeb services logs stackspay-backend --follow",
+    "koyeb:logs:staging": "koyeb services logs stackspay-backend-staging --follow",
+    "koyeb:status": "koyeb services get stackspay-backend",
+    "koyeb:status:staging": "koyeb services get stackspay-backend-staging"
 
   },
   "devDependencies": {

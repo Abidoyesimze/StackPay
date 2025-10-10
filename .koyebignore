@@ -1,0 +1,86 @@
+# Koyeb ignore file - excludes files from build context
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+docs/
+*.txt
+
+# Development files
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+
+# Environment files (secrets should be in Koyeb secrets)
+.env
+.env.*
+!.env.example
+
+# Dependencies that will be installed during build
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Build artifacts (will be generated during build)
+dist/
+build/
+coverage/
+.turbo/
+
+# Test files
+test/
+tests/
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+jest.config.js
+.nyc_output/
+
+# Development and CI files
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+docker-compose*.yml
+Dockerfile.dev
+.dockerignore
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+.tmp/

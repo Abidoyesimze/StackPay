@@ -1,0 +1,88 @@
+apiVersion: koyeb.com/v1
+kind: Service
+metadata:
+  name: stackspay-backend
+spec:
+  # Service configuration
+  name: stackspay-backend
+  type: web
+  
+  # Build configuration for monorepo
+  build:
+    type: docker
+    docker:
+      dockerfile: apps/backend/Dockerfile
+      context: .
+      target: production
+    
+  # Runtime configuration
+  instance_type: nano
+  scaling:
+    min: 1
+    max: 3
+  
+  # Health check
+  health_check:
+    http:
+      path: /health
+      port: 3000
+    initial_delay_seconds: 30
+    timeout_seconds: 10
+    
+  # Port configuration
+  ports:
+    - port: 3000
+      protocol: http
+      public: true
+      
+  # Environment variables
+  env:
+    - name: NODE_ENV
+      value: production
+    - name: PORT
+      value: "3000"
+    # Database
+    - name: DATABASE_URL
+      from: secret
+      secret_name: DATABASE_URL
+    - name: REDIS_URL
+      from: secret
+      secret_name: REDIS_URL
+    # Stacks/Bitcoin
+    - name: STACKS_NETWORK
+      value: mainnet
+    - name: STACKS_API_URL
+      value: https://api.hiro.so
+    # Security
+    - name: JWT_SECRET
+      from: secret
+      secret_name: JWT_SECRET
+    - name: ENCRYPTION_KEY
+      from: secret
+      secret_name: ENCRYPTION_KEY
+    # API Keys (if needed)
+    - name: WEBHOOK_SECRET
+      from: secret
+      secret_name: WEBHOOK_SECRET
+      
+  # Resource limits
+  resources:
+    memory: 512Mi
+    cpu: 0.1
+    
+  # Regions (adjust based on your target audience)
+  regions:
+    - fra # Frankfurt
+    
+---
+# Optional: Database service configuration
+# Uncomment if you want Koyeb to manage your PostgreSQL database
+# apiVersion: koyeb.com/v1
+# kind: Database
+# metadata:
+#   name: stackspay-postgres
+# spec:
+#   engine: postgresql
+#   version: "15"
+#   instance_type: free
+#   region: fra

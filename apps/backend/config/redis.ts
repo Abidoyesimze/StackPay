@@ -3,7 +3,7 @@ import { config } from './env';
 import { logger } from '../utils/logger';
 
 class RedisClient {
-  private client;
+  private client: ReturnType<typeof createClient>;
   private isConnected = false;
 
   constructor() {
@@ -63,7 +63,7 @@ class RedisClient {
     return result === 1;
   }
 
-  getClient(): RedisClientType {
+  getClient() {
     return this.client;
   }
 
