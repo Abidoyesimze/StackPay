@@ -65,7 +65,7 @@ export default function SettingsPage() {
   };
 
   // Mock API key for demo
-  const mockApiKey = 'sk_live_1234567890abcdef1234567890abcdef12345678';
+  // const mockApiKey = 'sk_live_1234567890abcdef1234567890abcdef12345678';
 
   if (isLoading) {
     return (
