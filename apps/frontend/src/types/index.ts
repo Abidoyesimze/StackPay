@@ -24,13 +24,37 @@ export interface WidgetConfig {
 }
 
 export interface ThemeConfig {
+  // Legacy colors
   primaryColor?: string
   backgroundColor?: string
   textColor?: string
-  borderRadius?: string
   logo?: string
   logoWidth?: number
   logoHeight?: number
+  
+  // Neo-minimal design system
+  background?: string
+  surface?: string
+  textPrimary?: string
+  textSecondary?: string
+  accentGreen?: string
+  accentLime?: string
+  border?: string
+  
+  // Typography
+  fontFamily?: string
+  
+  // Shadows
+  shadowSubtle?: string
+  shadowCard?: string
+  shadowGlass?: string
+  
+  // Spacing
+  borderRadius?: string
+  padding?: string
+  
+  // Animation
+  enableAnimations?: boolean
 }
 
 export interface LanguageConfig {

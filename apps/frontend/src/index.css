@@ -1,20 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    font-family: system-ui, sans-serif;
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-background text-text-primary antialiased;
+  }
+
+  * {
+    @apply border-border;
   }
 }
 
 @layer components {
   .widget-container {
     @apply bg-white rounded-lg shadow-lg border border-gray-200 p-6 max-w-md mx-auto;
+  }
+  
+  .neo-widget-container {
+    background-color: var(--widget-surface);
+    border: 1px solid var(--widget-border);
+    border-radius: var(--widget-border-radius);
+    padding: var(--widget-padding);
+    box-shadow: var(--widget-shadow-card);
+    font-family: var(--widget-font-family);
+    max-width: 24rem;
+    margin: 0 auto;
   }
   
   .qr-code-container {

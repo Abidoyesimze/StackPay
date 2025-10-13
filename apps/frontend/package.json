@@ -17,6 +17,8 @@
     "@stackspay/ui": "workspace:*",
     "@stackspay/utils": "workspace:*",
     "@stackspay/widget": "workspace:*",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.545.0",
     "qrcode": "^1.5.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

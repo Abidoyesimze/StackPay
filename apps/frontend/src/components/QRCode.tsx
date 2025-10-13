@@ -38,7 +38,7 @@ export function QRCodeComponent({ data, size = 200, className = '' }: QRCodeComp
     <div className={`qr-code-container ${className}`}>
       <canvas
         ref={canvasRef}
-        className="rounded-lg"
+        className="rounded-lg shadow-subtle"
         width={size}
         height={size}
       />
