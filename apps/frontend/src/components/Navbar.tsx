@@ -8,8 +8,8 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: 'Features', href: '#features' },
+    { name: 'Demo', href: '/demo' },
     { name: 'Docs', href: '#docs' },
-    { name: 'Dashboard', href: '/dashboard' },
     { name: 'Contact', href: '#contact' },
   ];
 

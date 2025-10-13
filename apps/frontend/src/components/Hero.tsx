@@ -112,8 +112,9 @@ export const Hero = () => {
               variant="outline"
               size="lg"
               className="border-border hover:bg-surface rounded-xl px-8 py-4 text-lg font-medium transition-all duration-200 hover:scale-105"
+              onClick={() => window.location.href = '/demo'}
             >
-              View Docs
+              Try Demo
             </Button>
           </motion.div>
 

@@ -129,14 +129,24 @@ export const Features = () => {
           <p className="text-text-secondary mb-6">
             Ready to start accepting Bitcoin payments?
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center px-8 py-4 bg-accent-green hover:bg-accent-green/90 text-white rounded-xl font-medium transition-all duration-200 shadow-card"
-          >
-            Get Started Now
-            <ArrowRight className="ml-2 w-5 h-5" />
-          </motion.button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center px-8 py-4 bg-accent-green hover:bg-accent-green/90 text-white rounded-xl font-medium transition-all duration-200 shadow-card"
+            >
+              Get Started Now
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.location.href = '/demo'}
+              className="inline-flex items-center px-8 py-4 border border-border hover:bg-surface rounded-xl font-medium transition-all duration-200"
+            >
+              Try Demo
+            </motion.button>
+          </div>
         </motion.div>
       </div>
     </section>
