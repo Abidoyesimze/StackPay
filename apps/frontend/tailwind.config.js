@@ -28,11 +28,11 @@ export default {
         },
         accent: {
           green: {
-            DEFAULT: '#00FFB2',
+            DEFAULT: '#10B981',
             light: '#4ade80',
           },
           lime: {
-            DEFAULT: '#00E6A8',
+            DEFAULT: '#059669',
             light: '#bef264',
           },
         },
