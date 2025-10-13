@@ -4,7 +4,7 @@ import {
   ArrowRight,
   Check
 } from 'lucide-react';
-import { PaymentWidget } from '@stackspay/widget';
+import { PaymentWidget } from './PaymentWidget';
 
 export const WidgetPreview = () => {
   const startPaymentAnimation = () => {
@@ -51,8 +51,8 @@ export const WidgetPreview = () => {
                   apiKey="demo-key"
                   amount={100000} // 0.001 BTC in satoshis
                   description="Premium Plan Subscription"
-                  onPaymentSuccess={(paymentId) => {
-                    console.log('Payment successful:', paymentId);
+                  onPaymentComplete={(payment) => {
+                    console.log('Payment successful:', payment);
                     startPaymentAnimation();
                   }}
                   onPaymentError={(error) => {
