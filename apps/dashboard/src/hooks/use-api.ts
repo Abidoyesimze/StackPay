@@ -1,14 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { StacksPaySDK } from '@stackspay/sdk';
+// import { StacksPaySDK } from '@stackspay/sdk';
 import { useAuthStore } from '../store/auth-store';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-// Initialize SDK
-const sdk = new StacksPaySDK({
-  apiKey: '', // Will be set dynamically
-  baseUrl: API_BASE_URL,
-});
+// Initialize SDK (for future use)
+// const sdk = new StacksPaySDK({
+//   apiKey: '', // Will be set dynamically
+//   baseUrl: API_BASE_URL,
+// });
 
 // API functions
 export const api = {

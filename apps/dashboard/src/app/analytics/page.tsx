@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@stackspay/ui';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@stackspay/ui';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { formatCurrency } from '@stackspay/utils';
 
 export default function AnalyticsPage() {
@@ -176,7 +176,7 @@ export default function AnalyticsPage() {
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={(props: any) => `${props.name} ${(props.percent * 100).toFixed(0)}%`}
                   >
                     {paymentMethodsData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />

@@ -7,21 +7,14 @@ import {
   uintCV,
   getAddressFromPrivateKey,
 } from '@stacks/transactions';
-import { AccountsApi, Configuration, TransactionsApi } from '@stacks/blockchain-api-client';
+// Configuration import removed as it's not available in the new API
 import { NETWORK, CONTRACT_ADDRESS, CONTRACT_NAME, ESCROW_PRIVATE_KEY } from '../config/stacks';
 import { logger } from '../utils/logger';
 import { config } from '../config/env';
 
 export class StacksService {
-  private accountsApi: AccountsApi;
-  private transactionsApi: TransactionsApi;
-
   constructor() {
-    const apiConfig = new Configuration({
-      basePath: config.stacks.apiUrl,
-    });
-    this.accountsApi = new AccountsApi(apiConfig);
-    this.transactionsApi = new TransactionsApi(apiConfig);
+    // API configuration handled via direct fetch calls
   }
 
   // Generate a valid STX payment address
@@ -31,7 +24,7 @@ export class StacksService {
         throw new Error('ESCROW_PRIVATE_KEY is not set');
       }
 
-      const address = getAddressFromPrivateKey(ESCROW_PRIVATE_KEY, NETWORK.version);
+      const address = getAddressFromPrivateKey(ESCROW_PRIVATE_KEY, NETWORK);
 
       if (!address) {
         throw new Error('Derived address is invalid');
@@ -48,7 +41,9 @@ export class StacksService {
   // Check transaction status and confirmations
   async getTransactionStatus(txId: string) {
     try {
-      const tx = await this.transactionsApi.getTransactionById({ txId }) as {
+      // Using fetch directly since the API client structure has changed
+      const response = await fetch(`${config.stacks.apiUrl}/extended/v1/tx/${txId}`);
+      const tx = await response.json() as {
         tx_status: string;
         block_height?: number;
         burn_block_height?: number;
@@ -72,18 +67,19 @@ export class StacksService {
   // Check if payment received at address
   async checkPaymentReceived(address: string, expectedAmountBtc: number): Promise<{ received: boolean; txHash?: string }> {
     try {
-      const txList = await this.accountsApi.getAccountTransactions({
-        principal: address,
-        limit: 20,
-      });
+      // Using fetch directly since the API client structure has changed
+      const response = await fetch(`${config.stacks.apiUrl}/extended/v1/address/${address}/transactions?limit=20`);
+      const txList = await response.json() as {
+        results: Array<{
+          tx_status: string;
+          tx_type: string;
+          token_transfer?: { amount?: string };
+          tx_id: string;
+        }>;
+      };
 
       // Look for successful STX transfers matching the expected amount
-      for (const tx of txList.results as Array<{
-        tx_status: string;
-        tx_type: string;
-        token_transfer?: { amount?: string };
-        tx_id: string;
-      }>) {
+      for (const tx of txList.results) {
         if (tx.tx_status === 'success' && tx.tx_type === 'token_transfer') {
           const amountStx = parseInt(tx.token_transfer?.amount || '0');
           const expectedStx = this.btcToMicroStx(expectedAmountBtc);
@@ -122,9 +118,9 @@ export class StacksService {
       };
 
       const transaction = await makeContractCall(txOptions);
-      const broadcastResponse = await broadcastTransaction(transaction, NETWORK);
+      const broadcastResponse = await broadcastTransaction({ transaction });
 
-      if (broadcastResponse.error) {
+      if ('error' in broadcastResponse) {
         throw new Error(`Broadcast failed: ${broadcastResponse.error}`);
       }
 
@@ -144,8 +140,12 @@ export class StacksService {
   // Get account balance
   async getBalance(address: string): Promise<number> {
     try {
-      const account = await this.accountsApi.getAccountBalance({ principal: address });
-      return parseInt(account.stx.balance);
+      // Using fetch directly since the API client structure has changed
+      const response = await fetch(`${config.stacks.apiUrl}/extended/v1/address/${address}/stx`);
+      const account = await response.json() as {
+        balance: string;
+      };
+      return parseInt(account.balance);
     } catch (error) {
       logger.error(`Failed to get balance for ${address}`, error);
       throw error;

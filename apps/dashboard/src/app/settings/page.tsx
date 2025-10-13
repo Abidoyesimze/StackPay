@@ -65,7 +65,7 @@ export default function SettingsPage() {
   };
 
   // Mock API key for demo
-  const mockApiKey =;
+  const mockApiKey = 'sk_test_1234567890abcdef';
 
   if (isLoading) {
     return (

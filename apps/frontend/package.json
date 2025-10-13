@@ -1,0 +1,51 @@
+{
+  "name": "@stackspay/frontend",
+  "version": "0.0.1",
+  "description": "StackPay payment widget frontend application",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stackspay/sdk": "workspace:*",
+    "@stackspay/ui": "workspace:*",
+    "@stackspay/utils": "workspace:*",
+    "@stackspay/widget": "workspace:*",
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.545.0",
+    "qrcode": "^1.5.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^6.28.0",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "@types/minimatch": "^6.0.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "@typescript-eslint/parser": "^8.46.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.37.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "jsdom": "^25.0.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
+    "terser": "^5.44.0",
+    "typescript": "^5.3.3",
+    "vite": "^6.0.1",
+    "vitest": "^2.1.8"
+  }
+}

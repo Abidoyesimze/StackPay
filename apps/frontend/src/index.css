@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0F172A;
+  --surface: #111827;
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --accent-green: #10B981;
+  --accent-lime: #059669;
+  --border: #1E293B;
+}
+
+:root:not(.dark) {
+  --background: #f9f9f9;
+  --surface: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --accent-green: #4ade80;
+  --accent-lime: #bef264;
+  --border: #e5e7eb;
+}
+
+@layer base {
+  html {
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-text-primary antialiased;
+  }
+
+  * {
+    @apply border-border;
+  }
+}
+
+@layer components {
+  .widget-container {
+    @apply bg-surface rounded-lg shadow-lg border border-border p-6 max-w-md mx-auto;
+  }
+  
+  .neo-widget-container {
+    background-color: var(--widget-surface);
+    border: 1px solid var(--widget-border);
+    border-radius: var(--widget-border-radius);
+    padding: var(--widget-padding);
+    box-shadow: var(--widget-shadow-card);
+    font-family: var(--widget-font-family);
+    max-width: 24rem;
+    margin: 0 auto;
+  }
+  
+  .qr-code-container {
+    @apply flex justify-center items-center bg-white p-4 rounded-lg border border-gray-200;
+  }
+  
+  .status-indicator {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .status-pending {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .status-confirmed {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  .status-complete {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .status-error {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .bitcoin-address {
+    @apply font-mono text-sm bg-surface p-2 rounded border break-all;
+  }
+  
+  .copy-button {
+    @apply bg-accent-green hover:bg-accent-green/90 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+  }
+  
+  .copy-button:disabled {
+    @apply bg-border cursor-not-allowed;
+  }
+}
+
+/* Custom animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin;
+}

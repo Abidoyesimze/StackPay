@@ -122,7 +122,7 @@ export default function PaymentsPage() {
     },
   ];
 
-  const filteredPayments = (paymentsData?.payments || mockPayments).filter(payment => {
+  const filteredPayments = (paymentsData?.payments || mockPayments).filter((payment: any) => {
     const matchesSearch = payment.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          payment.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || payment.status === statusFilter;
@@ -217,7 +217,7 @@ export default function PaymentsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedPayments.map((payment) => (
+                  {paginatedPayments.map((payment: any) => (
                     <TableRow key={payment.id}>
                       <TableCell className="font-mono text-sm">
                         {payment.id}

@@ -1,40 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
+    /* StackPay brand colors matching frontend */
+    --background: #0F172A;
+    --surface: #111827;
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --accent-green: #10B981;
+    --accent-lime: #059669;
+    --border: #1E293B;
+    
+    /* shadcn/ui colors for compatibility */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 355 7% 97%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 142 76% 36%;
+    --radius: 0.75rem;
+  }
+
+  :root:not(.dark) {
+    /* Light mode colors - keeping dark theme for dashboard consistency */
+    --background: #0F172A;
+    --surface: #111827;
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    --accent-green: #10B981;
+    --accent-lime: #059669;
+    --border: #1E293B;
+    
+    /* Light mode shadcn/ui colors - keeping dark theme */
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 355 7% 97%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -50,10 +69,51 @@
 }
 
 @layer base {
+  html {
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-text-primary antialiased;
+  }
+
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+}
+
+@layer components {
+  .glass-card {
+    background-color: rgba(17, 24, 39, 0.9);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(30, 41, 59, 0.6);
+    border-radius: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-accent-green to-accent-lime;
+  }
+  
+  .brand-button {
+    background-color: var(--accent-green);
+    color: white;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .brand-button:hover {
+    background-color: rgba(16, 185, 129, 0.9);
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  }
+  
+  .dashboard-bg {
+    background: linear-gradient(135deg, #0F172A 0%, #111827 100%);
+    min-height: 100vh;
   }
 }
