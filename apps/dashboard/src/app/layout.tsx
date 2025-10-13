@@ -15,11 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="en" suppressHydrationWarning className="dark">
+      <body className="bg-background text-text-primary">
         <QueryProvider>
           <ThemeProvider
-            defaultTheme="system"
+            defaultTheme="dark"
             storageKey="stackspay-ui-theme"
           >
             {children}

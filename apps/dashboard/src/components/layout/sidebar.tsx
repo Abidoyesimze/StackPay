@@ -41,7 +41,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 glass-card transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 lg:bg-surface/95",
+        "fixed inset-y-0 left-0 z-50 w-64 glass-card transform transition-all duration-300 ease-in-out lg:translate-x-0",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <div className="flex flex-col h-full">
@@ -59,7 +59,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="lg:hidden hover:bg-surface/80 rounded-xl"
+              className="lg:hidden hover:bg-gray-800/50 dark:hover:bg-gray-700/50 rounded-xl"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -77,7 +77,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group",
                     isActive
                       ? "bg-accent-green/10 text-accent-green border border-accent-green/20"
-                      : "text-text-secondary hover:text-text-primary hover:bg-surface/80"
+                      : "text-text-secondary hover:text-text-primary hover:bg-gray-800/50 dark:hover:bg-gray-700/50"
                   )}
                   onClick={() => {
                     // Close mobile menu when navigating

@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@stackspay/ui';
 import { formatBTC, formatCurrency } from '@stackspay/utils';
-import { TrendingUp, TrendingDown, DollarSign, CreditCard, Bitcoin } from 'lucide-react';
+import { TrendingUp, TrendingDown, CreditCard, Bitcoin } from 'lucide-react';
 
 interface StatsCardsProps {
   stats: {

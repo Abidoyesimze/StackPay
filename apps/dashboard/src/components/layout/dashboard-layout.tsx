@@ -12,15 +12,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="dashboard-bg min-h-screen">
       {/* Animated Background Grid */}
-      <div className="fixed inset-0 opacity-20 pointer-events-none">
+      <div className="fixed inset-0 opacity-10 pointer-events-none">
         <div 
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(16, 185, 129, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(16, 185, 129, 0.1) 1px, transparent 1px)
+              linear-gradient(rgba(16, 185, 129, 0.15) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(16, 185, 129, 0.15) 1px, transparent 1px)
             `,
             backgroundSize: '50px 50px',
           }}
@@ -32,10 +32,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         onClose={() => setSidebarOpen(false)} 
       />
       
-      <div className="lg:pl-64 relative z-10">
+      <div className="lg:ml-64 min-h-screen flex flex-col">
         <Header onMenuClick={() => setSidebarOpen(true)} />
         
-        <main className="p-6 space-y-6">
+        <main className="flex-1 p-6 space-y-8">
           {children}
         </main>
       </div>

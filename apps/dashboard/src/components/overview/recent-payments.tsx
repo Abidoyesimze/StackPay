@@ -59,7 +59,7 @@ export function RecentPayments({ payments }: RecentPaymentsProps) {
     <Card className="glass-card">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl font-bold text-text-primary">Recent Payments</CardTitle>
-        <Button variant="outline" size="sm" className="rounded-xl border-border hover:bg-surface/80 hover:border-accent-green/30">
+        <Button variant="outline" size="sm" className="rounded-xl border-border hover:bg-gray-800/50 dark:hover:bg-gray-700/50 hover:border-accent-green/30">
           View All
           <ExternalLink className="w-4 h-4 ml-2" />
         </Button>
@@ -77,7 +77,7 @@ export function RecentPayments({ payments }: RecentPaymentsProps) {
           </TableHeader>
           <TableBody>
             {payments.slice(0, 5).map((payment) => (
-              <TableRow key={payment.id} className="border-border/30 hover:bg-surface/50 transition-colors">
+              <TableRow key={payment.id} className="border-border/30 hover:bg-gray-800/30 dark:hover:bg-gray-700/30 transition-colors">
                 <TableCell className="font-mono text-sm text-text-primary">
                   {payment.id.slice(0, 8)}...
                 </TableCell>
@@ -91,7 +91,7 @@ export function RecentPayments({ payments }: RecentPaymentsProps) {
                   {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm" className="hover:bg-surface/80 rounded-lg">
+                  <Button variant="ghost" size="sm" className="hover:bg-gray-800/50 dark:hover:bg-gray-700/50 rounded-lg">
                     <Eye className="w-4 h-4 text-text-secondary" />
                   </Button>
                 </TableCell>

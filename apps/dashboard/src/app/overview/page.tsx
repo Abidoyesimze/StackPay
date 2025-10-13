@@ -105,7 +105,7 @@ export default function OverviewPage() {
           <h1 className="text-4xl font-bold text-text-primary">Overview</h1>
           <p className="text-text-secondary mt-2">Monitor your Bitcoin payment activity</p>
         </div>
-        <div className="text-sm text-text-secondary bg-surface/50 px-4 py-2 rounded-xl border border-border/50">
+        <div className="text-sm text-text-secondary bg-gray-800/50 dark:bg-gray-700/50 px-4 py-2 rounded-xl border border-border/50">
           Last updated: {new Date().toLocaleTimeString()}
         </div>
       </div>
