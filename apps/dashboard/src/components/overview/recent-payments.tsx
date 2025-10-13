@@ -56,10 +56,10 @@ export function RecentPayments({ payments }: RecentPaymentsProps) {
   };
 
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Recent Payments</CardTitle>
-        <Button variant="outline" size="sm">
+        <CardTitle className="text-xl font-bold text-text-primary">Recent Payments</CardTitle>
+        <Button variant="outline" size="sm" className="rounded-xl border-border hover:bg-surface/80 hover:border-accent-green/30">
           View All
           <ExternalLink className="w-4 h-4 ml-2" />
         </Button>
@@ -67,32 +67,32 @@ export function RecentPayments({ payments }: RecentPaymentsProps) {
       <CardContent>
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Actions</TableHead>
+            <TableRow className="border-border/50">
+              <TableHead className="text-text-secondary font-medium">ID</TableHead>
+              <TableHead className="text-text-secondary font-medium">Amount</TableHead>
+              <TableHead className="text-text-secondary font-medium">Status</TableHead>
+              <TableHead className="text-text-secondary font-medium">Date</TableHead>
+              <TableHead className="text-text-secondary font-medium">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {payments.slice(0, 5).map((payment) => (
-              <TableRow key={payment.id}>
-                <TableCell className="font-mono text-sm">
+              <TableRow key={payment.id} className="border-border/30 hover:bg-surface/50 transition-colors">
+                <TableCell className="font-mono text-sm text-text-primary">
                   {payment.id.slice(0, 8)}...
                 </TableCell>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium text-text-primary">
                   {formatAmount(payment)}
                 </TableCell>
                 <TableCell>
                   {getStatusBadge(payment.status)}
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="text-text-secondary">
                   {format(new Date(payment.createdAt), 'MMM dd, yyyy')}
                 </TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="sm">
-                    <Eye className="w-4 h-4" />
+                  <Button variant="ghost" size="sm" className="hover:bg-surface/80 rounded-lg">
+                    <Eye className="w-4 h-4 text-text-secondary" />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -101,7 +101,7 @@ export function RecentPayments({ payments }: RecentPaymentsProps) {
         </Table>
         
         {payments.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-text-secondary">
             No payments yet
           </div>
         )}

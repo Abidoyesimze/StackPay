@@ -11,18 +11,7 @@ export default defineConfig({
     },
   },
   build: {
-    lib: {
-      entry: path.resolve(__dirname, 'src/widget-vanilla.js'),
-      name: 'StacksPayWidget',
-      fileName: (format) => `widget.${format}.js`,
-      formats: ['umd', 'es']
-    },
-    rollupOptions: {
-      external: [],
-      output: {
-        manualChunks: undefined
-      }
-    },
+    outDir: 'dist',
     target: 'es2015',
     minify: 'terser',
     terserOptions: {

@@ -99,10 +99,13 @@ export default function OverviewPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Overview</h1>
-        <div className="text-sm text-muted-foreground">
+        <div>
+          <h1 className="text-4xl font-bold text-text-primary">Overview</h1>
+          <p className="text-text-secondary mt-2">Monitor your Bitcoin payment activity</p>
+        </div>
+        <div className="text-sm text-text-secondary bg-surface/50 px-4 py-2 rounded-xl border border-border/50">
           Last updated: {new Date().toLocaleTimeString()}
         </div>
       </div>
