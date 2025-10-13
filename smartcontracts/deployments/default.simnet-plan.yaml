@@ -5,43 +5,43 @@ network: simnet
 genesis:
   wallets:
     - name: deployer
-      address: ST2X2M7NT2ATD91GRJD99H7P472EJEPDZDTAWYYMW
+      address: ST296WZKPEAYKPXR7JASKKSYWD2C40G51SG1216A3
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: faucet
-      address: STH7G81NCRBRTZCH305B6XB4CVG7N582SNMXMTVE
+      address: STD8N690TCJMTFBMW24K0TGE9RH3G2ZCVFX91S01
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_1
-      address: ST4BYWJBN0DZMYXE4EP51YAG6ZGNC56R1A3SAGKM
+      address: ST9ETSVQKH8SAKD4T8E3KV8K3DMRGFQWN8CZPHVP
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_2
-      address: ST4YGDW4FKM3XWSRHSS0HSM568CWY4WHY97CMT8Z
+      address: ST2KKD5QSNYNR4KMPYT571RHYQDA74WYB0XWTYF7N
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_3
-      address: STEPGDQWMR18SRT1SETJ60GBJ48V1R2WR93HQVYD
+      address: ST28FJ9DX85MH61G35JJ6Z84Z89D5NZEWSMFHT6XZ
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_4
-      address: ST12JVVEVFG3QPK8P0NFNQY43AK2BD00MD2C5A422
+      address: ST2975YCR79HJFK5T0ACR8AVMZ3ZCH4D6YVRG6ZBG
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_5
-      address: ST16Q24DE6V7ZNG76YYSMB5NFHYNS6D9QZW8NNG11
+      address: STBGDXCAWV1DSE8A3W4S7BZS2GD9WYDADQFBTJ6D
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_6
-      address: ST08NJTG962Z8DWCWSX0DP30NXVTCM9Y0N46H5E2
+      address: ST430M8VZ10T8ZS9H7CBBQ7BHVSDPA311DX45CG2
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_7
-      address: ST3WE5R50GP5Q0093HQ1H2GBEF2A6TGS03GFSJJVB
+      address: ST35NEMZSQ569GYN98K49G9E0W730B1KVHCNXS7JD
       balance: "100000000000000"
       sbtc-balance: "1000000000"
     - name: wallet_8
-      address: ST04CG9K7BKFNTG6JDRRHXFEEVZ448PS2FCCYV7D
+      address: ST29512QWR75BY5T0QW52MYP3RRFJYW0H4W0S4JES
       balance: "100000000000000"
       sbtc-balance: "1000000000"
   contracts:
@@ -64,27 +64,27 @@ plan:
       transactions:
         - emulated-contract-publish:
             contract-name: fee-collection
-            emulated-sender: ST2X2M7NT2ATD91GRJD99H7P472EJEPDZDTAWYYMW
+            emulated-sender: ST296WZKPEAYKPXR7JASKKSYWD2C40G51SG1216A3
             path: contracts/fee-collection.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: merchant-registry
-            emulated-sender: ST2X2M7NT2ATD91GRJD99H7P472EJEPDZDTAWYYMW
+            emulated-sender: ST296WZKPEAYKPXR7JASKKSYWD2C40G51SG1216A3
             path: contracts/merchant-registry.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: oracle-integration
-            emulated-sender: ST2X2M7NT2ATD91GRJD99H7P472EJEPDZDTAWYYMW
+            emulated-sender: ST296WZKPEAYKPXR7JASKKSYWD2C40G51SG1216A3
             path: contracts/oracle-integration.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: payment-escrow
-            emulated-sender: ST2X2M7NT2ATD91GRJD99H7P472EJEPDZDTAWYYMW
+            emulated-sender: ST296WZKPEAYKPXR7JASKKSYWD2C40G51SG1216A3
             path: contracts/payment-escrow.clar
             clarity-version: 3
         - emulated-contract-publish:
             contract-name: treasury
-            emulated-sender: ST2X2M7NT2ATD91GRJD99H7P472EJEPDZDTAWYYMW
+            emulated-sender: ST296WZKPEAYKPXR7JASKKSYWD2C40G51SG1216A3
             path: contracts/treasury.clar
             clarity-version: 3
       epoch: "3.2"

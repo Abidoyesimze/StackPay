@@ -10,7 +10,6 @@ import {
   Settings, 
   Home, 
   TrendingUp,
-  Menu,
   X
 } from 'lucide-react';
 import { Button } from '@stackspay/ui';

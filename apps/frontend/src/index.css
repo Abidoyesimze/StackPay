@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .widget-container {
+    @apply bg-white rounded-lg shadow-lg border border-gray-200 p-6 max-w-md mx-auto;
+  }
+  
+  .qr-code-container {
+    @apply flex justify-center items-center bg-white p-4 rounded-lg border border-gray-200;
+  }
+  
+  .status-indicator {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .status-pending {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .status-confirmed {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  .status-complete {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .status-error {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .bitcoin-address {
+    @apply font-mono text-sm bg-gray-100 p-2 rounded border break-all;
+  }
+  
+  .copy-button {
+    @apply bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+  }
+  
+  .copy-button:disabled {
+    @apply bg-gray-400 cursor-not-allowed;
+  }
+}
+
+/* Custom animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin;
+}
