@@ -2,12 +2,12 @@ import { PaymentWidget } from '../components/PaymentWidget'
 
 export function WidgetPage() {
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto py-16">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        <h1 className="text-3xl font-bold text-text-primary mb-4">
           StackPay Widget
         </h1>
-        <p className="text-gray-600">
+        <p className="text-text-secondary">
           Standalone widget for embedding in your website
         </p>
       </div>

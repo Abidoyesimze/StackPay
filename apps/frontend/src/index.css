@@ -4,6 +4,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #0F172A;
+  --surface: #111827;
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --accent-green: #00FFB2;
+  --accent-lime: #00E6A8;
+  --border: #1E293B;
+}
+
+:root:not(.dark) {
+  --background: #f9f9f9;
+  --surface: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --accent-green: #4ade80;
+  --accent-lime: #bef264;
+  --border: #e5e7eb;
+}
+
 @layer base {
   html {
     font-family: 'Outfit', 'Inter', system-ui, sans-serif;
@@ -21,7 +41,7 @@
 
 @layer components {
   .widget-container {
-    @apply bg-white rounded-lg shadow-lg border border-gray-200 p-6 max-w-md mx-auto;
+    @apply bg-surface rounded-lg shadow-lg border border-border p-6 max-w-md mx-auto;
   }
   
   .neo-widget-container {
@@ -60,15 +80,15 @@
   }
   
   .bitcoin-address {
-    @apply font-mono text-sm bg-gray-100 p-2 rounded border break-all;
+    @apply font-mono text-sm bg-surface p-2 rounded border break-all;
   }
   
   .copy-button {
-    @apply bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+    @apply bg-accent-green hover:bg-accent-green/90 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200;
   }
   
   .copy-button:disabled {
-    @apply bg-gray-400 cursor-not-allowed;
+    @apply bg-border cursor-not-allowed;
   }
 }
 

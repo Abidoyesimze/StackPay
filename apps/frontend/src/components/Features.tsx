@@ -7,6 +7,7 @@ import {
   ArrowRight,
   CheckCircle
 } from 'lucide-react';
+import { useI18n } from '../i18n/context';
 
 const features = [
   {
@@ -36,6 +37,8 @@ const features = [
 ];
 
 export const Features = () => {
+  const { t } = useI18n();
+  
   return (
     <section id="features" className="py-24 bg-surface">
       <div className="max-w-6xl mx-auto px-6">
@@ -47,13 +50,10 @@ export const Features = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-text-primary mb-6">
-            Built for{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-green to-accent-lime">
-              Modern Payments
-            </span>
+            {t('features.title')}
           </h2>
           <p className="text-xl text-text-secondary leading-relaxed max-w-3xl mx-auto">
-            Everything you need to accept Bitcoin payments with enterprise-grade security and developer-friendly tools.
+            {t('features.subtitle')}
           </p>
         </motion.div>
 
@@ -127,7 +127,7 @@ export const Features = () => {
           className="text-center mt-16"
         >
           <p className="text-text-secondary mb-6">
-            Ready to start accepting Bitcoin payments?
+            {t('features.cta')}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.button
@@ -135,7 +135,7 @@ export const Features = () => {
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center px-8 py-4 bg-accent-green hover:bg-accent-green/90 text-white rounded-xl font-medium transition-all duration-200 shadow-card"
             >
-              Get Started Now
+              {t('features.get_started_now')}
               <ArrowRight className="ml-2 w-5 h-5" />
             </motion.button>
             <motion.button
@@ -144,7 +144,7 @@ export const Features = () => {
               onClick={() => window.location.href = '/demo'}
               className="inline-flex items-center px-8 py-4 border border-border hover:bg-surface rounded-xl font-medium transition-all duration-200"
             >
-              Try Demo
+              {t('hero.try_demo')}
             </motion.button>
           </div>
         </motion.div>

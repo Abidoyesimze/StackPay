@@ -84,13 +84,13 @@ export function PaymentWidget({
 
   // Default neo-minimal theme values
   const defaultTheme = {
-    background: '#f9f9f9',
-    surface: '#ffffff',
-    textPrimary: '#1a1a1a',
-    textSecondary: '#6b7280',
-    accentGreen: '#4ade80',
-    accentLime: '#bef264',
-    border: '#e5e7eb',
+    background: '#0F172A',
+    surface: '#111827',
+    textPrimary: '#F9FAFB',
+    textSecondary: '#9CA3AF',
+    accentGreen: '#00FFB2',
+    accentLime: '#00E6A8',
+    border: '#1E293B',
     fontFamily: 'Outfit, Inter, sans-serif',
     shadowSubtle: '0 2px 8px rgba(0,0,0,0.04)',
     shadowCard: '0 4px 12px rgba(0,0,0,0.06)',

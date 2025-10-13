@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, QrCode, Bitcoin } from 'lucide-react';
 import { Button } from '@stackspay/ui';
+import { useI18n } from '../i18n/context';
 
 export const Hero = () => {
+  const { t } = useI18n();
+  
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Animated Background Grid */}
@@ -76,11 +79,10 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-tight"
           >
-            Accept Bitcoin Payments{' '}
+            {t('hero.title')}{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-green to-accent-lime">
-              Instantly
-            </span>{' '}
-            on Stacks
+              {t('hero.subtitle')}
+            </span>
           </motion.h1>
 
           {/* Subtext */}
@@ -90,8 +92,8 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl md:text-2xl text-text-secondary leading-relaxed max-w-4xl mx-auto"
           >
-            StackPay makes it easy for anyone to accept Bitcoin payments securely — powered by the{' '}
-            <span className="font-medium text-text-primary">Stacks blockchain</span>.
+            {t('hero.description')}{' '}
+            <span className="font-medium text-text-primary">{t('hero.stacks_blockchain')}</span>.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -114,7 +116,7 @@ export const Hero = () => {
               className="border-border hover:bg-surface rounded-xl px-8 py-4 text-lg font-medium transition-all duration-200 hover:scale-105"
               onClick={() => window.location.href = '/demo'}
             >
-              Try Demo
+              {t('hero.try_demo')}
             </Button>
           </motion.div>
 
@@ -125,7 +127,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="pt-16"
           >
-            <p className="text-sm text-text-secondary mb-6">Trusted by developers worldwide</p>
+            <p className="text-sm text-text-secondary mb-6">{t('hero.trust_indicators')}</p>
             <div className="flex items-center justify-center space-x-8 opacity-60">
               <div className="text-text-secondary font-medium">Stacks Foundation</div>
               <div className="w-px h-6 bg-border"></div>

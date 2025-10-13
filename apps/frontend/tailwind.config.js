@@ -4,20 +4,42 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: '#f9f9f9',
-        surface: '#ffffff',
+        background: {
+          DEFAULT: '#0F172A',
+          light: '#f9f9f9',
+        },
+        surface: {
+          DEFAULT: '#111827',
+          light: '#ffffff',
+        },
         text: {
-          primary: '#1a1a1a',
-          secondary: '#6b7280',
+          primary: {
+            DEFAULT: '#F9FAFB',
+            light: '#1a1a1a',
+          },
+          secondary: {
+            DEFAULT: '#9CA3AF',
+            light: '#6b7280',
+          },
         },
         accent: {
-          green: '#4ade80',
-          lime: '#bef264',
+          green: {
+            DEFAULT: '#00FFB2',
+            light: '#4ade80',
+          },
+          lime: {
+            DEFAULT: '#00E6A8',
+            light: '#bef264',
+          },
         },
-        border: '#e5e7eb',
+        border: {
+          DEFAULT: '#1E293B',
+          light: '#e5e7eb',
+        },
         // Keep existing colors for compatibility
         primary: {
           50: '#f0f9ff',

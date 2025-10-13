@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Github, Twitter, ArrowRight } from 'lucide-react';
+import { useI18n } from '../i18n/context';
 
 const footerLinks = {
   Product: [
@@ -34,6 +35,8 @@ const socialLinks = [
 ];
 
 export const Footer = () => {
+  const { t } = useI18n();
+  
   return (
     <footer className="bg-background border-t border-border">
       <div className="max-w-6xl mx-auto px-6">
@@ -57,8 +60,7 @@ export const Footer = () => {
                 </span>
               </div>
               <p className="text-text-secondary leading-relaxed mb-6 max-w-md">
-                The easiest way to accept Bitcoin payments on the Stacks blockchain. 
-                Built for developers, by developers.
+                {t('footer.description')}
               </p>
               
               {/* Newsletter Signup */}
@@ -68,7 +70,7 @@ export const Footer = () => {
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="flex-1 px-4 py-2 border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-green/20 focus:border-accent-green"
+                    className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-accent-green/20 focus:border-accent-green text-text-primary"
                   />
                   <motion.button
                     whileHover={{ scale: 1.05 }}
@@ -121,7 +123,7 @@ export const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-text-secondary text-sm">
-              © 2024 StackPay. All rights reserved.
+              {t('footer.copyright')}
             </div>
 
             {/* Social Links */}
